@@ -2,6 +2,7 @@ package com.springboot.demo_park_api.service;
 
 
 import com.springboot.demo_park_api.entity.Usuario;
+import com.springboot.demo_park_api.exception.EntityNotFoundException;
 import com.springboot.demo_park_api.exception.UsernameUniqueViolationException;
 import com.springboot.demo_park_api.repository.UsuarioRepository;
 import jakarta.transaction.Transactional;
@@ -35,7 +36,7 @@ public class UsuarioService {
     public Usuario buscarPorId(Long id) {
         //retorna o objeto usuário ou uma exceção
         return usuarioRepository.findById(id).orElseThrow(
-                () -> new RuntimeException("Usuário não encontrado.")
+                () -> new EntityNotFoundException(String.format("Usuário id=%s não encontrado.", id))
         );
     }
 
