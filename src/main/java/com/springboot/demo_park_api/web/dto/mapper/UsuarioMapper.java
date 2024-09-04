@@ -7,6 +7,9 @@ import com.springboot.demo_park_api.web.dto.UsuarioResponseDto;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.PropertyMap;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 //método que faz a conversão de usuário response para usuário DTO.
 public class UsuarioMapper {
 
@@ -31,5 +34,12 @@ public class UsuarioMapper {
         //podemos acessar addMappings - Esse método recebe um param do tipo PropertyMap
         mapper.addMappings(props);
         return mapper.map(usuario, UsuarioResponseDto.class);
+    }
+
+    //met para trabalhar com listas
+    public static List<UsuarioResponseDto> toListDto(List<Usuario> usuarios) {
+        //tranformar em objeto dto e depois transformar em usuarioResponseDto
+        //map java - vai transforma em usuarioResponseDto
+        return usuarios.stream().map(user -> toDto(user)).collect(Collectors.toList());
     }
 }
