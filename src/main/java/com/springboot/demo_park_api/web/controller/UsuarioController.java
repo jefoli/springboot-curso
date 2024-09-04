@@ -6,6 +6,7 @@ import com.springboot.demo_park_api.web.dto.UsuarioCreateDto;
 import com.springboot.demo_park_api.web.dto.UsuarioResponseDto;
 import com.springboot.demo_park_api.web.dto.UsuarioSenhaDto;
 import com.springboot.demo_park_api.web.dto.mapper.UsuarioMapper;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,8 +23,9 @@ public class UsuarioController {
     //injeção de dependências para service
     private final UsuarioService usuarioService;
 
+    //precisamos adc anotacao(@Valid) para informar o controle que o objeto precisa ser validado
     @PostMapping
-    public ResponseEntity<UsuarioResponseDto> create(@RequestBody UsuarioCreateDto createDto) {
+    public ResponseEntity<UsuarioResponseDto> create(@Valid @RequestBody UsuarioCreateDto createDto) {
         Usuario user = usuarioService.salvar(UsuarioMapper.toUsuario(createDto));
 
         //resposta para o usuário:
