@@ -61,4 +61,16 @@ public class UsuarioService {
         //findAll() - retorna uma lista de usuarios.
         return usuarioRepository.findAll();
     }
+
+    @Transactional
+    public Usuario buscarPorUsername(String username) {
+        return usuarioRepository.findByUsername(username).orElseThrow(
+                () -> new EntityNotFoundException(String.format("Usuário com '%s' não encontrado", username))
+        );
+    }
+
+    @Transactional
+    public Usuario.Role buscarRolePorUsername(String username) {
+        return usuarioRepository.findRoleByUsername(username);
+    }
 }
