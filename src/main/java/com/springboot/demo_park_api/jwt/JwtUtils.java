@@ -26,6 +26,7 @@ public class JwtUtils {
     public static final long EXPIRE_HOURS = 0;
     public static final long EXPIRE_MINUTES = 2;
 
+    //criamos um construtor privado, pois vamos trabalhar com métodos estáticos
     private JwtUtils(){
     }
 
@@ -36,7 +37,6 @@ public class JwtUtils {
     }
 
     //precesso de expiração do token - data em que o token foi criado e a data que desejamos que seja expirado
-
     private static Date toExpireDate(Date start) {
         LocalDateTime dateTime = start.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
 
@@ -48,8 +48,8 @@ public class JwtUtils {
 
     //metodo que gera o token
     public static JwtToken createToken(String username, String role) {
-        Date issueAt = new Date();
-        Date limit = toExpireDate(issueAt);
+        Date issueAt = new Date(); //gera data criação do token
+        Date limit = toExpireDate(issueAt); //data limite do token
 
         String token = Jwts.builder()
                 .setHeaderParam("typ", "JWT")
@@ -94,7 +94,7 @@ public class JwtUtils {
         return false;
     }
 
-    //método para remover o bearer
+    //método para remover o "bearer" do token
     private static String refactorToken(String token) {
         if(token.contains(JWT_BEARER)) {
             return token.substring(JWT_BEARER.length());
