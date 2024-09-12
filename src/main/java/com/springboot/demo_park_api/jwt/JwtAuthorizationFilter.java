@@ -27,9 +27,9 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         //recuperar o token a partir do cabeçalho authorization.
 
         final String token = request.getHeader(JwtUtils.JWT_AUTHORIZATION);
+
         if(token == null || !token.startsWith(JwtUtils.JWT_BEARER)) {
             log.info(("JWT está nulo, vazio ou não inicial com 'Bearer '."));
-
             filterChain.doFilter(request, response);
             return;
         }

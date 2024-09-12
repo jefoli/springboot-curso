@@ -8,6 +8,7 @@ import com.springboot.demo_park_api.repository.UsuarioRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,11 +21,13 @@ na classe como método construtor - assim o spring faz a injeção de dependênc
 public class UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Transactional
     public Usuario salvar(Usuario usuario) {
         //salva usuário no BD
         try {
+            usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
             return usuarioRepository.save(usuario);
 
         } catch (DataIntegrityViolationException ex) {
@@ -32,6 +35,7 @@ public class UsuarioService {
             throw new UsernameUniqueViolationException(String.format("Username {%s} já cadastrado", usuario.getUsername()));
         }
     }
+
     @Transactional
     public Usuario buscarPorId(Long id) {
         //retorna o objeto usuário ou uma exceção
@@ -48,11 +52,11 @@ public class UsuarioService {
 
         Usuario user = buscarPorId(id);
 
-        if(!user.getPassword().equals(senhaAtual)) {
+        if(!passwordEncoder.matches(senhaAtual, user.getPassword())) {
             throw new RuntimeException("Sua senha não confere.");
         }
 
-        user.setPassword(novaSenha);
+        user.setPassword(passwordEncoder.encode(novaSenha));
         return user;
     }
 
