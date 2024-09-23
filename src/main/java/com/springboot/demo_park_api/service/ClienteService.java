@@ -1,0 +1,28 @@
+package com.springboot.demo_park_api.service;
+
+import com.springboot.demo_park_api.entity.Cliente;
+import com.springboot.demo_park_api.repository.ClienteRepository;
+import com.springboot.demo_park_api.web.exception.CpfUniqueViolationException;
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.stereotype.Service;
+
+@Service
+@RequiredArgsConstructor
+public class ClienteService {
+    private final ClienteRepository clienteRepository;
+
+    @Transactional
+    public Cliente salvar(Cliente cliente) {
+
+        //exceção caso já tenha um clente com o cpf cadastrado no DB
+
+        try {
+            return clienteRepository.save(cliente);
+        } catch (DataIntegrityViolationException ex) {
+            throw new CpfUniqueViolationException(
+                    String.format("CPF '%s' não pode ser cadastrado, já existe no sistema", cliente.getCpf()));
+        }
+    }
+}

@@ -30,7 +30,7 @@ public class ApiExceptionHandler {
     }
 
 
-    @ExceptionHandler(UsernameUniqueViolationException.class)
+    @ExceptionHandler({UsernameUniqueViolationException.class, CpfUniqueViolationException.class})
     public ResponseEntity<ErrorMessage> uniqueViolationException(RuntimeException ex,
                                                                         HttpServletRequest request) {
         // erro 422 - UNPROCESSABLE_ENTITY - quando a app não consegue processar a info eniada pelo cliente
