@@ -7,7 +7,11 @@ import com.springboot.demo_park_api.web.exception.CpfUniqueViolationException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -32,5 +36,12 @@ public class ClienteService {
         return clienteRepository.findById(id).orElseThrow(
                 () -> new EntityNotFoundException(String.format("Cliente id=%s não encontrado no sistema", id))
         );
+    }
+
+    //recurso para listar os clientes
+    @Transactional
+    public Page<Cliente> buscarTodos(Pageable pegeable) {
+        return clienteRepository.findAll(pegeable); //retorna uma lista de clients
+
     }
 }
