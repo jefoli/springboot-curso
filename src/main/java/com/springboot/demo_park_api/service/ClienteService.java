@@ -3,6 +3,7 @@ package com.springboot.demo_park_api.service;
 import com.springboot.demo_park_api.entity.Cliente;
 import com.springboot.demo_park_api.exception.EntityNotFoundException;
 import com.springboot.demo_park_api.repository.ClienteRepository;
+import com.springboot.demo_park_api.repository.projection.ClienteProjection;
 import com.springboot.demo_park_api.web.exception.CpfUniqueViolationException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -40,8 +41,7 @@ public class ClienteService {
 
     //recurso para listar os clientes
     @Transactional
-    public Page<Cliente> buscarTodos(Pageable pegeable) {
-        return clienteRepository.findAll(pegeable); //retorna uma lista de clients
-
+    public Page<ClienteProjection> buscarTodos(Pageable pegeable) {
+        return clienteRepository.findAllPageable(pegeable); //retorna uma lista de clients
     }
 }
