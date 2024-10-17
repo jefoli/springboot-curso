@@ -124,4 +124,59 @@ public class EstacionamentoIT {
 
     }
 
+    @Test
+    public void buscarChekin_ComPerfilAdmin_RetornarDadosStatus200() {
+
+        testClient.get()
+                .uri("/api/v1/estacionamentos/check-in/{recibo}", "20230313-101300")
+                .headers(JwtAuthentication.getHeaderAuthorization(testClient, "ana@email.com", "123456"))
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody()
+                .jsonPath("placa").isEqualTo("FIT-1020")
+                .jsonPath("marca").isEqualTo("FIAT")
+                .jsonPath("modelo").isEqualTo("PALIO")
+                .jsonPath("cor").isEqualTo("VERDE")
+                .jsonPath("clienteCpf").isEqualTo("98401203015")
+                .jsonPath("recibo").isEqualTo("20230313-101300")
+                .jsonPath("dataEntrada").isEqualTo("2023-03-13 10:15:00")
+                .jsonPath("vagaCodigo").isEqualTo("A-01");
+
+    }
+
+    @Test
+    public void buscarChekin_ComPerfilCliente_RetornarDadosStatus200() {
+
+        testClient.get()
+                .uri("/api/v1/estacionamentos/check-in/{recibo}", "20230313-101300")
+                .headers(JwtAuthentication.getHeaderAuthorization(testClient, "bob@email.com", "123456"))
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody()
+                .jsonPath("placa").isEqualTo("FIT-1020")
+                .jsonPath("marca").isEqualTo("FIAT")
+                .jsonPath("modelo").isEqualTo("PALIO")
+                .jsonPath("cor").isEqualTo("VERDE")
+                .jsonPath("clienteCpf").isEqualTo("98401203015")
+                .jsonPath("recibo").isEqualTo("20230313-101300")
+                .jsonPath("dataEntrada").isEqualTo("2023-03-13 10:15:00")
+                .jsonPath("vagaCodigo").isEqualTo("A-01");
+
+    }
+
+    @Test
+    public void buscarChekin_ComReciboInexistente_RetornarErrorStatus404() {
+
+        testClient.get()
+                .uri("/api/v1/estacionamentos/check-in/{recibo}", "20230313-000000")
+                .headers(JwtAuthentication.getHeaderAuthorization(testClient, "ana@email.com", "123456"))
+                .exchange()
+                .expectStatus().isNotFound()
+                .expectBody()
+                .jsonPath("status").isEqualTo("404")
+                .jsonPath("path").isEqualTo("/api/v1/estacionamentos/check-in/20230313-000000")
+                .jsonPath("method").isEqualTo("GET");
+
+    }
+
 }
