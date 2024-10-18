@@ -1,0 +1,26 @@
+package com.springboot.demo_park_api.repository.projection;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+
+@JsonInclude(JsonInclude.Include.NON_NULL) //não mostra as infos o objeto de saída como nulo.
+public interface ClienteVagaProjection {
+
+    String getPlaca();
+    String getMarca();
+    String getModelo();
+    String getCor();
+    String getClienteCpf();
+    String getRecibo();
+
+    @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss")
+    LocalDateTime getDataEntrada();
+    @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss")
+    LocalDateTime getDataSaida();
+    String getVagaCodigo();
+    BigDecimal getValor();
+    BigDecimal getDesconto();
+}
